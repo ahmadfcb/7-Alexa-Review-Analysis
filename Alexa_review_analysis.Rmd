@@ -1,0 +1,63 @@
+---
+title: "Alexa_Review_Sentiment_Analysis"
+author: "18F-0178_M Mustafa Ali"
+date: "1/16/2022"
+output: pdf_document
+---
+#alexa_reviews <- read.csv("amazon_alexa.csv")
+```{r }
+
+alexa_reviews <- read.csv("amazon_alexa.csv")
+alexa_reviews <- alexa_reviews[1:5,1:4]
+alexa_reviews
+library(Hmisc)
+describe(alexa_reviews)
+custom_colors <- c("skyblue", "yellowgreen", 'tomato', "blue", "red")
+pie(alexa_reviews$rating, labels = rownames(alexa_reviews), col=custom_colors, main = "Alexa Reviews Ratings")
+install.packages("plotrix")
+library("plotrix")
+draw.circle(0, 0, 0.4, col="white")
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(sentimentr, dplyr, magrittr)
+sentiment(alexa_reviews$verified_reviews)
+temp <- alexa_reviews
+i<-1
+for(review in temp$verified_reviews)
+{
+   temp$Sentiment[i] <- sentiment(review)$sentiment
+   if(temp$Sentiment[i] > 0)
+   {
+       temp$category[i] = "Positive"
+   }
+   else if(temp$Sentiment[i] < 0)
+   {
+       temp$category[i] = "Negative"
+   }
+   else if(temp$Sentiment[i] == 0)
+   {
+       temp$category[i] = "Neutral"
+   }
+   i<-i+1
+}
+temp
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
